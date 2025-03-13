@@ -3,8 +3,6 @@ import { Task } from '../models/task.model';
 import { TaskSlice } from '../models/task-slice.model';
 import { ComponentStore } from '@ngrx/component-store';
 import { v4 as uuidv4 } from 'uuid';
-import { TaskDb } from '../component/shared/task.db';
-import { inject } from '@angular/core';
 
 const  INIT: TaskSlice = {
     tasks: [],
@@ -14,8 +12,7 @@ const  INIT: TaskSlice = {
 
 export class TaskStore extends ComponentStore<TaskSlice> {
 
-    private taskDb = inject(TaskDb);
-
+    
     constructor() {
         // init to empty array
         super(INIT);
@@ -25,7 +22,6 @@ export class TaskStore extends ComponentStore<TaskSlice> {
     // addTask(task) - add task to the store list
     readonly addTask = this.updater<Task>((slice: TaskSlice , newTask: Task) => {
         const toSaveTask : Task = {...newTask, id: uuidv4().substring(0, 8)};
-        this.taskDb.saveTask(toSaveTask);
         return { 
             tasks: [...slice.tasks, toSaveTask],
             audit: [...slice.audit, 
