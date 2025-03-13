@@ -1,0 +1,14 @@
+
+<table>
+    <tr *ngFor="let task of tasks$ | async">
+        <td>
+            <span>{{task.name}}</span>
+        </td>
+        <td>
+            <span>{{task.priority}}</span>
+        </td>
+        <td>
+            <button (click)="deleteTask(task.id)">Delete  {{task.id}}</button>
+        </td>
+    </tr>
+</table>
