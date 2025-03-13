@@ -1,4 +1,12 @@
 
+<div>
+    <select (change)="filterByPriority($event)">
+        <option value="all">EVERYTHING</option>
+        <option value="low">LOW</option>
+        <option value="medium">MEDIUM</option>
+        <option value="high">HIGH</option>
+    </select>
+</div>
 <table>
     <tr *ngFor="let task of tasks$ | async">
         <td>

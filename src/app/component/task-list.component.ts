@@ -15,8 +15,14 @@ export class TaskListComponent implements OnInit {
     protected allTasks : Task[] = [];
 
     ngOnInit() {
-        this.tasks$ = this.taskStore.getTasks$;
+        this.tasks$ = this.taskStore.getTasks$('all');
         console.log(this.tasks$);
+    }
+
+    filterByPriority(event: any){
+        let priorityVal = event.target.value;
+        console.log("priorityVal >> ", priorityVal);
+        this.tasks$ = this.taskStore.getTasks$(priorityVal);
     }
 
     deleteTask(taskid: string){

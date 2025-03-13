@@ -3,6 +3,8 @@ import { Task } from '../models/task.model';
 import { TaskSlice } from '../models/task-slice.model';
 import { ComponentStore } from '@ngrx/component-store';
 import { v4 as uuidv4 } from 'uuid';
+import { TaskDb } from '../component/shared/task.db';
+import { inject } from '@angular/core';
 
 const  INIT: TaskSlice = {
     tasks: [],
@@ -11,6 +13,9 @@ const  INIT: TaskSlice = {
 }
 
 export class TaskStore extends ComponentStore<TaskSlice> {
+
+    private taskDb = inject(TaskDb);
+
     constructor() {
         // init to empty array
         super(INIT);
@@ -20,6 +25,7 @@ export class TaskStore extends ComponentStore<TaskSlice> {
     // addTask(task) - add task to the store list
     readonly addTask = this.updater<Task>((slice: TaskSlice , newTask: Task) => {
         const toSaveTask : Task = {...newTask, id: uuidv4().substring(0, 8)};
+        this.taskDb.saveTask(toSaveTask);
         return { 
             tasks: [...slice.tasks, toSaveTask],
             audit: [...slice.audit, 
@@ -38,19 +44,11 @@ export class TaskStore extends ComponentStore<TaskSlice> {
             priorityFilter: slice.priorityFilter
         } as TaskSlice;
     });
-
-    // Selector query - get all tasks 
-    // readonly getTasks$ = this.select<Task[]>((slice: TaskSlice) => {
-    //     return slice.tasks.filter(t => 
-    //         (slice.priorityFilter === 'all' || t.priority === slice.priorityFilter));
-    // });
-
-
-    // Selector query - get all tasks 
-    readonly getTasks$ = this.select<Task[]>((slice: TaskSlice) => 
-        slice.tasks.filter(t => 
-            (slice.priorityFilter === 'all' || t.priority === slice.priorityFilter))
-    );
+    
+    readonly getTasks$ = (priority: string) => {
+        return this.select<Task[]>
+            ((slice: TaskSlice) => slice.tasks.filter(t => (priority === 'all') || (t.priority === priority)))
+    }
 
     // selector query the state get count of tasks
     readonly getTaskCount$ = this.select<number>((slice: TaskSlice) => {
