@@ -15,7 +15,7 @@ export class TaskListComponent implements OnInit {
     protected allTasks : Task[] = [];
 
     ngOnInit() {
-        this.tasks$ = this.taskStore.getTasks$;
+        this.tasks$ = this.taskStore.getTasks$('all');
         console.log(this.tasks$);
     }
 

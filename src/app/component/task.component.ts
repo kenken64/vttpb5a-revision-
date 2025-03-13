@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Task } from '../models/task.model';
 import { TaskStore } from '../store/task.store';
+import { map, mergeMap, of } from 'rxjs';
 
 @Component({
     selector: 'app-task',
@@ -15,7 +16,7 @@ export class TaskComponent  implements OnInit {
     protected form!: FormGroup;
 
     ngOnInit() { 
-        this.form = this.createForm();    
+        this.form = this.createForm();
     }
 
     processForm(){
@@ -26,7 +27,7 @@ export class TaskComponent  implements OnInit {
             ...this.form.value
         }
         console.log(newTask);
-        this.taskStore.addTask(newTask);
+        this.taskStore.saveTask(newTask);
         this.form = this.createForm();
     }
 

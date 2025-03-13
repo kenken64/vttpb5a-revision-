@@ -17,8 +17,8 @@ export class TaskDb extends Dexie {
         this.tasks = this.table("tasks");
     }
 
-    removeTask(id: string) {
-        this.tasks.delete(id);
+    removeTask(id: string){
+        return this.tasks.delete(id).then(() => id);
     }
 
     saveTask(task: Task): Promise<Task> {
